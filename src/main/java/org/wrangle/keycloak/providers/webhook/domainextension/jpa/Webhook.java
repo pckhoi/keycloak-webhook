@@ -29,7 +29,11 @@ import javax.persistence.Table;
 
 @Entity
 @Table(name = "WEBHOOK")
-@NamedQueries({ @NamedQuery(name = "findByRealm", query = "from Webhook where realmId = :realmId") })
+@NamedQueries({
+        @NamedQuery(name = "findByRealm", query = "from Webhook where realmId = :realmId"),
+        @NamedQuery(name = "findByRealmUserEventType", query = "select distinct Webhook from Webhook inner join Webhook.filters as filter where realmId = :realmId and filter.userEventType = :userEventType"),
+        @NamedQuery(name = "findByRealmAdminEvent", query = "select distinct Webhook from Webhook inner join Webhook.filters as filter where realmId = :realmId and ((filter.adminEventOperationType = :adminEventOperationType and filter.adminEventResourceType = :adminEventResourceType) or (filter.adminEventOperationType = :adminEventOperationType and filter.adminEventResourceType is null) or (filter.adminEventOperationType is null and filter.adminEventResourceType = :adminEventResourceType))")
+})
 public class Webhook {
 
     @Id

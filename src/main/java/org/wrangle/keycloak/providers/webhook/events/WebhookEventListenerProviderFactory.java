@@ -27,6 +27,6 @@ public class WebhookEventListenerProviderFactory implements EventListenerProvide
 
     @Override
     public String getId() {
-        return "myThemeSelector";
+        return "webhookEventListener";
     }
 }

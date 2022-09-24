@@ -37,14 +37,6 @@ public class WebhookRestResource {
 
     @Path("webhooks")
     public WebhookResource getWebhookResource() {
-        return new WebhookResource(session);
-    }
-
-    // Same like "webhooks" endpoint, but REST endpoint is authenticated with
-    // Bearer token and user must be in realm role "admin"
-    // Just for illustration purposes
-    @Path("webhooks-auth")
-    public WebhookResource getWebhookResourceAuthenticated() {
         checkRealmAdmin();
         return new WebhookResource(session);
     }
