@@ -36,7 +36,7 @@ public class WebhookJpaEntityProvider implements JpaEntityProvider {
 
     @Override
     public String getChangelogLocation() {
-        return "META-INF/example-changelog.xml";
+        return "META-INF/webhook-changelog.xml";
     }
 
     @Override

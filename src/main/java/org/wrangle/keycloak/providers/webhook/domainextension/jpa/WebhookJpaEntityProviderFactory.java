@@ -30,7 +30,7 @@ import org.keycloak.models.KeycloakSessionFactory;
  */
 public class WebhookJpaEntityProviderFactory implements JpaEntityProviderFactory {
 
-    protected static final String ID = "example-entity-provider";
+    protected static final String ID = "webhook-entity-provider";
 
     @Override
     public JpaEntityProvider create(KeycloakSession session) {

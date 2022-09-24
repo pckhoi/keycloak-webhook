@@ -47,7 +47,7 @@ public class WebhookServiceProviderFactoryImpl implements WebhookServiceProvider
 
     @Override
     public String getId() {
-        return "exampleServiceImpl";
+        return "webhookServiceImpl";
     }
 
 }

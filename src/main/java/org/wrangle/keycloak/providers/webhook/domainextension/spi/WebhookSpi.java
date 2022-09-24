@@ -30,7 +30,7 @@ public class WebhookSpi implements Spi {
 
     @Override
     public String getName() {
-        return "example";
+        return "webhook";
     }
 
     @Override
