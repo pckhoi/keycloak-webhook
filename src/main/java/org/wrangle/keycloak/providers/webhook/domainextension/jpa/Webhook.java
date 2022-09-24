@@ -17,11 +17,14 @@
 
 package org.wrangle.keycloak.providers.webhook.domainextension.jpa;
 
+import java.util.List;
+
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.Id;
 import javax.persistence.NamedQueries;
 import javax.persistence.NamedQuery;
+import javax.persistence.OneToMany;
 import javax.persistence.Table;
 
 @Entity
@@ -39,6 +42,12 @@ public class Webhook {
     @Column(name = "REALM_ID", nullable = false)
     private String realmId;
 
+    @Column(name = "URL", nullable = false)
+    private String url;
+
+    @OneToMany(mappedBy = "webhook")
+    private List<EventFilter> filters;
+
     public String getId() {
         return id;
     }
@@ -51,6 +60,14 @@ public class Webhook {
         return name;
     }
 
+    public String getURL() {
+        return url;
+    }
+
+    public List<EventFilter> getFilters() {
+        return filters;
+    }
+
     public void setId(String id) {
         this.id = id;
     }
@@ -61,5 +78,13 @@ public class Webhook {
 
     public void setRealmId(String realmId) {
         this.realmId = realmId;
+    }
+
+    public void setURL(String url) {
+        this.url = url;
+    }
+
+    public void setFilters(List<EventFilter> filters) {
+        this.filters = filters;
     }
 }

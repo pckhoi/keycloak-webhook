@@ -74,4 +74,11 @@ public class WebhookResource {
         return session.getProvider(WebhookService.class).findWebhook(id);
     }
 
+    @DELETE
+    @Path("{id}")
+    @NoCache
+    public void deleteWebhook(@PathParam("id") final String id) {
+        session.getProvider(WebhookService.class).deleteWebhook(id);
+    }
+
 }

@@ -21,7 +21,9 @@ import org.keycloak.connections.jpa.JpaConnectionProvider;
 import org.keycloak.models.KeycloakSession;
 import org.keycloak.models.RealmModel;
 import org.keycloak.models.utils.KeycloakModelUtils;
+import org.wrangle.keycloak.providers.webhook.domainextension.EventFilterRepresentation;
 import org.wrangle.keycloak.providers.webhook.domainextension.WebhookRepresentation;
+import org.wrangle.keycloak.providers.webhook.domainextension.jpa.EventFilter;
 import org.wrangle.keycloak.providers.webhook.domainextension.jpa.Webhook;
 import org.wrangle.keycloak.providers.webhook.domainextension.spi.WebhookService;
 
@@ -63,20 +65,53 @@ public class WebhookServiceImpl implements WebhookService {
 
     @Override
     public WebhookRepresentation findWebhook(String id) {
-        Webhook entity = getEntityManager().find(Webhook.class, id);
-        return entity == null ? null : new WebhookRepresentation(entity);
+        EntityManager em = getEntityManager();
+        Webhook entity = em.find(Webhook.class, id);
+
+        if (entity == null) {
+            return null;
+        }
+
+        List<EventFilter> filterEntities = em.createNamedQuery("findByWebhook", EventFilter.class)
+                .setParameter("webhookId", entity.getId())
+                .getResultList();
+        entity.setFilters(filterEntities);
+        return new WebhookRepresentation(entity);
     }
 
     @Override
     public WebhookRepresentation addWebhook(WebhookRepresentation webhook) {
-        Webhook entity = new Webhook();
-        String id = webhook.getId() == null ? KeycloakModelUtils.generateId() : webhook.getId();
-        entity.setId(id);
-        entity.setName(webhook.getName());
-        entity.setRealmId(getRealm().getId());
-        getEntityManager().persist(entity);
+        EntityManager em = getEntityManager();
+        String webhookId = KeycloakModelUtils.generateId();
 
-        webhook.setId(id);
+        try {
+            em.getTransaction().begin();
+
+            Webhook webhookEntity = new Webhook();
+            webhookEntity.setId(webhookId);
+            webhookEntity.setName(webhook.getName());
+            webhookEntity.setRealmId(getRealm().getId());
+            webhookEntity.setURL(webhook.getURL());
+            em.persist(webhookEntity);
+
+            for (EventFilterRepresentation filter : webhook.getFilters()) {
+                EventFilter filterEntity = new EventFilter();
+                String filterId = KeycloakModelUtils.generateId();
+                filterEntity.setId(filterId);
+                filterEntity.setUserEventType(filter.getUserEventType());
+                filterEntity.setAdminEventOperationType(filter.getAdminEventOperationType());
+                filterEntity.setAdminEventResourceType(filter.getAdminEventResourceType());
+                filterEntity.setWebhook(webhookEntity);
+                em.persist(filterEntity);
+                filter.setId(filterId);
+            }
+
+            em.getTransaction().commit();
+        } catch (Exception e) {
+            em.getTransaction().rollback();
+        }
+
+        webhook.setId(webhookId);
         return webhook;
     }
 
@@ -90,6 +125,12 @@ public class WebhookServiceImpl implements WebhookService {
         for (Webhook entity : webhookEntities) {
             em.remove(entity);
         }
+    }
+
+    @Override
+    public void deleteWebhook(String id) {
+        EntityManager em = getEntityManager();
+        em.remove(em.find(Webhook.class, id));
     }
 
     public void close() {

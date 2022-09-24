@@ -12,6 +12,27 @@
             <column name="REALM_ID" type="VARCHAR(36)">
                 <constraints nullable="false" />
             </column>
+            <column name="URL" type="VARCHAR(1023)">
+                <constraints nullable="false" />
+            </column>
+        </createTable>
+
+        <createTable tableName="EVENT_FILTER">
+            <column name="ID" type="VARCHAR(36)">
+                <constraints nullable="false" />
+            </column>
+            <column name="WEBHOOK_ID" type="VARCHAR(36)">
+                <constraints nullable="false" foreignKeyName="FK_EVENT_FILTER_WEBHOOK" references="WEBHOOK(ID)" deleteCascade="true" />
+            </column>
+            <column name="USER_EVENT_TYPE" type="INT">
+                <constraints nullable="true" />
+            </column>
+            <column name="ADMIN_EVENT_OPERATION_TYPE" type="INT">
+                <constraints nullable="true" />
+            </column>
+            <column name="ADMIN_EVENT_RESOURCE_TYPE" type="INT">
+                <constraints nullable="true" />
+            </column>
         </createTable>
 
         <addPrimaryKey constraintName="PK_WEBHOOK" tableName="WEBHOOK" columnNames="ID" />

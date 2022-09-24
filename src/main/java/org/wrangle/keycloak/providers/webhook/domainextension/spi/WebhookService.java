@@ -32,4 +32,5 @@ public interface WebhookService extends Provider {
 
     void deleteAllWebhooks();
 
+    void deleteWebhook(String id);
 }
