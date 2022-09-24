@@ -15,17 +15,17 @@
  * limitations under the License.
  */
 
-package org.wrangle.keycloak.providers.webhook.domainextension.spi.impl;
+package org.pckhoi.keycloak.providers.webhook.domainextension.spi.impl;
 
 import org.keycloak.connections.jpa.JpaConnectionProvider;
 import org.keycloak.models.KeycloakSession;
 import org.keycloak.models.RealmModel;
 import org.keycloak.models.utils.KeycloakModelUtils;
-import org.wrangle.keycloak.providers.webhook.domainextension.EventFilterRepresentation;
-import org.wrangle.keycloak.providers.webhook.domainextension.WebhookRepresentation;
-import org.wrangle.keycloak.providers.webhook.domainextension.jpa.EventFilter;
-import org.wrangle.keycloak.providers.webhook.domainextension.jpa.Webhook;
-import org.wrangle.keycloak.providers.webhook.domainextension.spi.WebhookService;
+import org.pckhoi.keycloak.providers.webhook.domainextension.EventFilterRepresentation;
+import org.pckhoi.keycloak.providers.webhook.domainextension.WebhookRepresentation;
+import org.pckhoi.keycloak.providers.webhook.domainextension.jpa.EventFilter;
+import org.pckhoi.keycloak.providers.webhook.domainextension.jpa.Webhook;
+import org.pckhoi.keycloak.providers.webhook.domainextension.spi.WebhookService;
 
 import javax.persistence.EntityManager;
 import java.util.LinkedList;

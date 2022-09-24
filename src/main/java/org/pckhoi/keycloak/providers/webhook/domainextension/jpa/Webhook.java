@@ -15,7 +15,7 @@
  * limitations under the License.
  */
 
-package org.wrangle.keycloak.providers.webhook.domainextension.jpa;
+package org.pckhoi.keycloak.providers.webhook.domainextension.jpa;
 
 import java.util.List;
 

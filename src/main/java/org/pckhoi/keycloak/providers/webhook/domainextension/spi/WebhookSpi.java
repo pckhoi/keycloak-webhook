@@ -15,7 +15,7 @@
  * limitations under the License.
  */
 
-package org.wrangle.keycloak.providers.webhook.domainextension.spi;
+package org.pckhoi.keycloak.providers.webhook.domainextension.spi;
 
 import org.keycloak.provider.Provider;
 import org.keycloak.provider.ProviderFactory;

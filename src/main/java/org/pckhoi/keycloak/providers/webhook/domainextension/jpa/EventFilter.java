@@ -1,4 +1,4 @@
-package org.wrangle.keycloak.providers.webhook.domainextension.jpa;
+package org.pckhoi.keycloak.providers.webhook.domainextension.jpa;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;

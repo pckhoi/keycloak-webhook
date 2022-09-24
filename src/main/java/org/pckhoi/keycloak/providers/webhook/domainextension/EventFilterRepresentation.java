@@ -1,9 +1,9 @@
-package org.wrangle.keycloak.providers.webhook.domainextension;
+package org.pckhoi.keycloak.providers.webhook.domainextension;
 
 import org.keycloak.events.EventType;
 import org.keycloak.events.admin.OperationType;
 import org.keycloak.events.admin.ResourceType;
-import org.wrangle.keycloak.providers.webhook.domainextension.jpa.EventFilter;
+import org.pckhoi.keycloak.providers.webhook.domainextension.jpa.EventFilter;
 
 public class EventFilterRepresentation {
 

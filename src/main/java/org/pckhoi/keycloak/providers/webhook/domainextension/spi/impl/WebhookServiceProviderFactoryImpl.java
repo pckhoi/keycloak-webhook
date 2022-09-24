@@ -15,13 +15,13 @@
  * limitations under the License.
  */
 
-package org.wrangle.keycloak.providers.webhook.domainextension.spi.impl;
+package org.pckhoi.keycloak.providers.webhook.domainextension.spi.impl;
 
 import org.keycloak.Config.Scope;
 import org.keycloak.models.KeycloakSession;
 import org.keycloak.models.KeycloakSessionFactory;
-import org.wrangle.keycloak.providers.webhook.domainextension.spi.WebhookService;
-import org.wrangle.keycloak.providers.webhook.domainextension.spi.WebhookServiceProviderFactory;
+import org.pckhoi.keycloak.providers.webhook.domainextension.spi.WebhookService;
+import org.pckhoi.keycloak.providers.webhook.domainextension.spi.WebhookServiceProviderFactory;
 
 public class WebhookServiceProviderFactoryImpl implements WebhookServiceProviderFactory {
 

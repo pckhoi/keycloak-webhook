@@ -1,4 +1,4 @@
-package org.wrangle.keycloak.providers.webhook.events;
+package org.pckhoi.keycloak.providers.webhook.events;
 
 import java.util.Map;
 

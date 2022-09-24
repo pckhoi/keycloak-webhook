@@ -1,4 +1,4 @@
-package org.wrangle.keycloak.providers.webhook.events;
+package org.pckhoi.keycloak.providers.webhook.events;
 
 import java.io.IOException;
 import java.util.List;
@@ -11,7 +11,7 @@ import org.keycloak.events.EventListenerProvider;
 import org.keycloak.events.admin.AdminEvent;
 import org.keycloak.models.KeycloakSession;
 import org.keycloak.models.RealmModel;
-import org.wrangle.keycloak.providers.webhook.domainextension.jpa.Webhook;
+import org.pckhoi.keycloak.providers.webhook.domainextension.jpa.Webhook;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;

@@ -15,12 +15,12 @@
  * limitations under the License.
  */
 
-package org.wrangle.keycloak.providers.webhook.domainextension.rest;
+package org.pckhoi.keycloak.providers.webhook.domainextension.rest;
 
 import org.jboss.resteasy.annotations.cache.NoCache;
 import org.keycloak.models.KeycloakSession;
-import org.wrangle.keycloak.providers.webhook.domainextension.WebhookRepresentation;
-import org.wrangle.keycloak.providers.webhook.domainextension.spi.WebhookService;
+import org.pckhoi.keycloak.providers.webhook.domainextension.WebhookRepresentation;
+import org.pckhoi.keycloak.providers.webhook.domainextension.spi.WebhookService;
 
 import javax.ws.rs.Consumes;
 import javax.ws.rs.DELETE;

@@ -15,13 +15,13 @@
  * limitations under the License.
  */
 
-package org.wrangle.keycloak.providers.webhook.domainextension;
+package org.pckhoi.keycloak.providers.webhook.domainextension;
 
 import java.util.ArrayList;
 import java.util.List;
 
-import org.wrangle.keycloak.providers.webhook.domainextension.jpa.EventFilter;
-import org.wrangle.keycloak.providers.webhook.domainextension.jpa.Webhook;
+import org.pckhoi.keycloak.providers.webhook.domainextension.jpa.EventFilter;
+import org.pckhoi.keycloak.providers.webhook.domainextension.jpa.Webhook;
 
 public class WebhookRepresentation {
 

@@ -15,7 +15,7 @@
  * limitations under the License.
  */
 
-package org.wrangle.keycloak.providers.webhook.domainextension.rest;
+package org.pckhoi.keycloak.providers.webhook.domainextension.rest;
 
 import org.keycloak.Config.Scope;
 import org.keycloak.models.KeycloakSession;
