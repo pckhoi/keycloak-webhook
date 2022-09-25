@@ -2,7 +2,7 @@
 version: "3.4"
 services:
   keycloak:
-    build: .
+    build: ..
     command: start-dev --import-realm
     volumes:
       - ./fixtures:/opt/keycloak/data/import:ro

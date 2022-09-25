@@ -45,8 +45,8 @@ public class WebhookRestResource {
         if (auth == null) {
             throw new NotAuthorizedException("Bearer");
         } else if (auth.getToken().getRealmAccess() == null
-                || !auth.getToken().getRealmAccess().isUserInRole("admin")) {
-            throw new ForbiddenException("Does not have realm admin role");
+                || !auth.getToken().getResourceAccess().get("realm-management").isUserInRole("realm-admin")) {
+            throw new ForbiddenException("Does not have realm-management.realm-admin role");
         }
     }
 

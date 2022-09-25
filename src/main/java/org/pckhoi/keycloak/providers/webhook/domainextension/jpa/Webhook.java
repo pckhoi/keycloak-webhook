@@ -30,9 +30,21 @@ import javax.persistence.Table;
 @Entity
 @Table(name = "WEBHOOK")
 @NamedQueries({
-        @NamedQuery(name = "findByRealm", query = "from Webhook where realmId = :realmId"),
-        @NamedQuery(name = "findByRealmUserEventType", query = "select distinct Webhook from Webhook inner join Webhook.filters as filter where realmId = :realmId and filter.userEventType = :userEventType"),
-        @NamedQuery(name = "findByRealmAdminEvent", query = "select distinct Webhook from Webhook inner join Webhook.filters as filter where realmId = :realmId and ((filter.adminEventOperationType = :adminEventOperationType and filter.adminEventResourceType = :adminEventResourceType) or (filter.adminEventOperationType = :adminEventOperationType and filter.adminEventResourceType is null) or (filter.adminEventOperationType is null and filter.adminEventResourceType = :adminEventResourceType))")
+        @NamedQuery(name = "findById", query = "select w " + "from Webhook w "
+                + "where w.id = :id"),
+        @NamedQuery(name = "findByRealm", query = "select w " + "from Webhook w "
+                + "where w.realmId = :realmId"),
+        @NamedQuery(name = "findByRealmUserEventType", query = "select distinct w "
+                + "from Webhook w "
+                + "inner join w.filters as f "
+                + "where w.realmId = :realmId " + "and f.userEventType = :userEventType"),
+        @NamedQuery(name = "findByRealmAdminEvent", query = "select distinct w "
+                + "from Webhook w "
+                + "inner join w.filters as f "
+                + "where w.realmId = :realmId "
+                + "and ((f.adminEventOperationType = :adminEventOperationType and f.adminEventResourceType = :adminEventResourceType) "
+                + "or (f.adminEventOperationType = :adminEventOperationType and f.adminEventResourceType is null) "
+                + "or (f.adminEventOperationType is null and f.adminEventResourceType = :adminEventResourceType))")
 })
 public class Webhook {
 

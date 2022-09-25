@@ -17,7 +17,8 @@ import org.keycloak.events.admin.ResourceType;
 @Entity
 @Table(name = "EVENT_FILTER")
 @NamedQueries({
-        @NamedQuery(name = "findByWebhook", query = "from EventFilter as filter inner join filter.webhook as webhook where webhook.id = :webhookId") })
+        @NamedQuery(name = "findByWebhook", query = "select f "
+                + "from EventFilter as f " + "inner join f.webhook as w " + "where w.id = :webhookId") })
 public class EventFilter {
 
     @Id
