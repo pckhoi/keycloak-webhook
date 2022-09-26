@@ -23,11 +23,6 @@ import org.keycloak.connections.jpa.entityprovider.JpaEntityProviderFactory;
 import org.keycloak.models.KeycloakSession;
 import org.keycloak.models.KeycloakSessionFactory;
 
-/**
- * @author <a href="mailto:erik.mulder@docdatapayments.com">Erik Mulder</a>
- * 
- *         Webhook JpaEntityProviderFactory.
- */
 public class WebhookJpaEntityProviderFactory implements JpaEntityProviderFactory {
 
     protected static final String ID = "webhook-entity-provider";

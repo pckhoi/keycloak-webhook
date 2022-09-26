@@ -43,7 +43,6 @@ import javax.persistence.Table;
                 + "inner join w.filters as f "
                 + "where w.realmId = :realmId "
                 + "and ((f.adminEventOperationType = :adminEventOperationType and f.adminEventResourceType = :adminEventResourceType) "
-                + "or (f.adminEventOperationType = :adminEventOperationType and f.adminEventResourceType is null) "
                 + "or (f.adminEventOperationType is null and f.adminEventResourceType = :adminEventResourceType))")
 })
 public class Webhook {

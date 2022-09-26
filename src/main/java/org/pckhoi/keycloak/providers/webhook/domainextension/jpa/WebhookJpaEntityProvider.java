@@ -22,11 +22,6 @@ import org.keycloak.connections.jpa.entityprovider.JpaEntityProvider;
 import java.util.Collections;
 import java.util.List;
 
-/**
- * @author <a href="mailto:erik.mulder@docdatapayments.com">Erik Mulder</a>
- * 
- *         Webhook JpaEntityProvider.
- */
 public class WebhookJpaEntityProvider implements JpaEntityProvider {
 
     @Override

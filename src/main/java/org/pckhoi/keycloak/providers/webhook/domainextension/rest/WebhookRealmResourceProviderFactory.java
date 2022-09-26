@@ -25,7 +25,7 @@ import org.keycloak.services.resource.RealmResourceProviderFactory;
 
 public class WebhookRealmResourceProviderFactory implements RealmResourceProviderFactory {
 
-    public static final String ID = "pckhoi-webhook-extension";
+    public static final String ID = "pckhoi-webhook";
 
     @Override
     public String getId() {

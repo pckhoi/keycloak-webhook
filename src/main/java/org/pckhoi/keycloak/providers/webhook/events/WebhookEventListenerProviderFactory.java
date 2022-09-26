@@ -8,6 +8,8 @@ import org.keycloak.models.KeycloakSessionFactory;
 
 public class WebhookEventListenerProviderFactory implements EventListenerProviderFactory {
 
+    public static final String PROVIDER_ID = "pckhoi-webhook";
+
     @Override
     public EventListenerProvider create(KeycloakSession session) {
         return new WebhookEventListenerProvider(session);
@@ -27,6 +29,6 @@ public class WebhookEventListenerProviderFactory implements EventListenerProvide
 
     @Override
     public String getId() {
-        return "webhookEventListener";
+        return PROVIDER_ID;
     }
 }

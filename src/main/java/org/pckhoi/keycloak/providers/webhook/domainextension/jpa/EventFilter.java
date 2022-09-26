@@ -14,6 +14,7 @@ import org.keycloak.events.EventType;
 import org.keycloak.events.admin.OperationType;
 import org.keycloak.events.admin.ResourceType;
 
+@EventFilterAnnotation
 @Entity
 @Table(name = "EVENT_FILTER")
 @NamedQueries({

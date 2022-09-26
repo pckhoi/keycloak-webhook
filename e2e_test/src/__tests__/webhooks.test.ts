@@ -4,6 +4,12 @@ import { promisify } from 'util';
 import { up, down, logs } from '../docker-compose';
 
 import { Client, isRealmReady } from '../keycloak-client';
+import { EventsConfig } from '../keycloak-client/keycloak';
+import {
+  AdminEventOperationType,
+  AdminEventResourceType,
+  UserEventType,
+} from '../keycloak-client/webhook-ext';
 import { retry } from '../retry';
 import { startServer } from '../server';
 
@@ -20,7 +26,6 @@ describe('webhook rest api', () => {
       isRealmReady(baseURL, realm),
     );
     client = await Client.authenticate(baseURL, realm, clientID, clientSecret);
-    console.log('authenticated!');
   });
 
   afterAll(async () => {
@@ -37,7 +42,16 @@ describe('webhook rest api', () => {
           url: 'http://localhost:1234/webhook',
           filters: [
             {
-              userEventType: 'REGISTER',
+              userEventType: UserEventType.Register,
+            },
+          ],
+        });
+        await client.createWebhook({
+          name: 'Another webhook',
+          url: 'http://localhost:1234/webhook1',
+          filters: [
+            {
+              userEventType: UserEventType.DeleteAccount,
             },
           ],
         });
@@ -53,20 +67,14 @@ describe('webhook rest api', () => {
         expect(webhook).toBeTruthy();
         expect(webhook.id).toEqual(webhookID);
         expect(webhook.filters).toHaveLength(1);
+        expect(webhook.filters[0].userEventType).toEqual(
+          UserEventType.Register,
+        );
       });
     });
 
     describe('get /webhooks', () => {
       it('should fetch all webhook', async () => {
-        await client.createWebhook({
-          name: 'Another webhook',
-          url: 'http://localhost:1234/webhook1',
-          filters: [
-            {
-              userEventType: 'REGISTER',
-            },
-          ],
-        });
         const webhooks = await client.listWebhooks();
         expect(webhooks).toHaveLength(2);
       });
@@ -89,16 +97,29 @@ describe('webhook rest api', () => {
     });
   });
 
-  describe('event handler', () => {
+  describe.only('event handler', () => {
     const received: Map<number, Record<string, any>> = new Map();
     let serverURL: string;
     let stopServer: () => Promise<void>;
 
     beforeAll(async () => {
+      await client.updateEventsConfig(
+        (cfg) =>
+          ({
+            ...cfg,
+            eventsEnabled: true,
+            eventsListeners: [...(cfg.eventsListeners || []), 'pckhoi-webhook'],
+            enabledEventTypes: cfg.enabledEventTypes,
+            adminEventsEnabled: true,
+            adminEventsDetailsEnabled: true,
+          } as EventsConfig),
+      );
       const server = await startServer((num, data) => {
         received.set(num, data);
       });
-      serverURL = `http://localhost:${(server.address() as AddressInfo).port}`;
+      serverURL = `http://host.docker.internal:${
+        (server.address() as AddressInfo).port
+      }`;
       stopServer = promisify(server.close.bind(server));
     });
 
@@ -108,6 +129,40 @@ describe('webhook rest api', () => {
 
     beforeEach(() => {
       received.clear();
+    });
+
+    it('should send user event', async () => {
+      const webhookURI = await client.createWebhook({
+        name: 'User registration',
+        url: `${serverURL}/webhook/1`,
+        filters: [
+          {
+            adminEventResourceType: AdminEventResourceType.User,
+            adminEventOperationType: AdminEventOperationType.Create,
+          },
+          // {
+          //   adminEventResourceType: AdminEventResourceType.User,
+          //   adminEventOperationType: AdminEventOperationType.Delete,
+          // },
+        ],
+      });
+      await client.createUser({
+        firstName: 'John',
+        lastName: 'Doe',
+        email: 'john.doe@example.com',
+        username: 'johndoe',
+        enabled: true,
+        credentials: [
+          {
+            type: 'password',
+            userLabel: 'My password',
+            temporary: false,
+            value: 'password',
+          },
+        ],
+      });
+      console.log(received.get(1));
+      expect(received.get(1)).toBeTruthy();
     });
   });
 });

@@ -1,18 +1,13 @@
 import axios, { AxiosResponse, AxiosInstance, AxiosError } from 'axios';
 
-type Filter = {
-  id?: string;
-  userEventType?: string;
-  adminEventOperationType?: string;
-  adminEventResourceType?: string;
-};
-
-type Webhook = {
-  id?: string;
-  name: string;
-  url: string;
-  filters: Filter[];
-};
+import { EventsConfig, User } from './keycloak';
+import {
+  Webhook,
+  Filter,
+  UserEventType,
+  AdminEventOperationType,
+  AdminEventResourceType,
+} from './webhook-ext';
 
 const handleError = (error: AxiosError): AxiosResponse<any, any> => {
   if (error.response) {
@@ -65,7 +60,15 @@ export class Client {
   }
 
   public get webhooksEndpoint(): string {
-    return `${this.baseURL}/realms/${this.realm}/pckhoi-webhook-extension/webhooks`;
+    return `${this.baseURL}/realms/${this.realm}/pckhoi-webhook/webhooks`;
+  }
+
+  public get usersEndpoint(): string {
+    return `${this.baseURL}/admin/realms/${this.realm}/users`;
+  }
+
+  public get eventsConfigEndpoint(): string {
+    return `${this.baseURL}/admin/realms/${this.realm}/events/config`;
   }
 
   public async createWebhook(webhook: Webhook): Promise<string> {
@@ -99,6 +102,29 @@ export class Client {
     return this.client
       .delete(this.webhooksEndpoint)
       .catch<AxiosResponse<any, null>>(handleError);
+  }
+
+  public async createUser(user: User): Promise<string> {
+    const resp: AxiosResponse<null, User> = await this.client
+      .post(this.usersEndpoint, user)
+      .catch<AxiosResponse<null, User>>(handleError);
+    return resp.headers['location'];
+  }
+
+  public async getEventsConfig(): Promise<EventsConfig> {
+    const resp: AxiosResponse<EventsConfig, null> = await this.client
+      .get(this.eventsConfigEndpoint)
+      .catch<AxiosResponse<EventsConfig, null>>(handleError);
+    return resp.data;
+  }
+
+  public async updateEventsConfig(
+    updateCallback: (cfg: EventsConfig) => EventsConfig,
+  ): Promise<void> {
+    const cfg = await this.getEventsConfig();
+    await this.client
+      .put(this.eventsConfigEndpoint, updateCallback(cfg))
+      .catch<AxiosResponse<null, EventsConfig>>(handleError);
   }
 }
 
