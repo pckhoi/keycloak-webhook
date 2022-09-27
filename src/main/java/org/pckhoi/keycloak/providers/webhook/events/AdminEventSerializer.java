@@ -22,14 +22,26 @@ public class AdminEventSerializer extends StdSerializer<AdminEventRepresentation
             AdminEventRepresentation value, JsonGenerator jgen, SerializerProvider provider)
             throws IOException, JsonProcessingException {
         jgen.writeStartObject();
-        jgen.writeStringField("id", value.getId());
-        jgen.writePOJOField("authDetails", value.getAuthDetails());
-        jgen.writeStringField("operationType", value.getOperationType().toString());
-        jgen.writeStringField("resourceType", value.getResourceType().toString());
-        jgen.writeStringField("resourcePath", value.getResourcePath());
+        if (value.getId() != null) {
+            jgen.writeStringField("id", value.getId());
+        }
+        if (value.getAuthDetails() != null) {
+            jgen.writePOJOField("authDetails", value.getAuthDetails());
+        }
+        if (value.getOperationType() != null) {
+            jgen.writeStringField("operationType", value.getOperationType().toString());
+        }
+        if (value.getResourceType() != null) {
+            jgen.writeStringField("resourceType", value.getResourceType().toString());
+        }
+        if (value.getResourcePath() != null) {
+            jgen.writeStringField("resourcePath", value.getResourcePath());
+        }
         jgen.writeNumberField("time", value.getTime());
-        jgen.writeFieldName("representation");
-        jgen.writeRawValue(value.getRepresentation());
+        if (value.getRepresentation() != null) {
+            jgen.writeFieldName("representation");
+            jgen.writeRawValue(value.getRepresentation());
+        }
         jgen.writeEndObject();
     }
 }

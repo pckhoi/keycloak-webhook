@@ -98,6 +98,13 @@ describe('webhook rest api', () => {
   });
 
   describe.only('event handler', () => {
+    type adminEventResponse = {
+      authDetails: {
+        userId: string;
+      };
+      operationType: string;
+    };
+
     const received: Map<number, Record<string, any>> = new Map();
     let serverURL: string;
     let stopServer: () => Promise<void>;
@@ -132,18 +139,24 @@ describe('webhook rest api', () => {
     });
 
     it('should send user event', async () => {
-      const webhookURI = await client.createWebhook({
-        name: 'User registration',
+      await client.createWebhook({
+        name: 'User creation',
         url: `${serverURL}/webhook/1`,
         filters: [
           {
             adminEventResourceType: AdminEventResourceType.User,
             adminEventOperationType: AdminEventOperationType.Create,
           },
-          // {
-          //   adminEventResourceType: AdminEventResourceType.User,
-          //   adminEventOperationType: AdminEventOperationType.Delete,
-          // },
+        ],
+      });
+      await client.createWebhook({
+        name: 'User removal',
+        url: `${serverURL}/webhook/2`,
+        filters: [
+          {
+            adminEventResourceType: AdminEventResourceType.User,
+            adminEventOperationType: AdminEventOperationType.Delete,
+          },
         ],
       });
       await client.createUser({
@@ -161,8 +174,14 @@ describe('webhook rest api', () => {
           },
         ],
       });
-      console.log(received.get(1));
-      expect(received.get(1)).toBeTruthy();
+      let data: adminEventResponse = received.get(1) as adminEventResponse;
+      expect(data).toBeTruthy();
+      expect(data.operationType).toEqual('CREATE');
+
+      await client.deleteUser(data.authDetails.userId);
+      data = received.get(2) as adminEventResponse;
+      expect(data).toBeTruthy();
+      expect(data.operationType).toEqual('DELETE');
     });
   });
 });

@@ -83,4 +83,11 @@ public class AdminEventRepresentation {
         this.time = time;
     }
 
+    @Override
+    public String toString() {
+        return "AdminEventRepresentation [authDetails=" + authDetails + ", id=" + id + ", operationType="
+                + operationType + ", representation=" + representation + ", resourcePath=" + resourcePath
+                + ", resourceType=" + resourceType + ", time=" + time + "]";
+    }
+
 }

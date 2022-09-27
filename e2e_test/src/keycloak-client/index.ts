@@ -111,6 +111,12 @@ export class Client {
     return resp.headers['location'];
   }
 
+  public async deleteUser(id: string): Promise<AxiosResponse<any, null>> {
+    return this.client
+      .delete(`${this.usersEndpoint}/${id}`)
+      .catch<AxiosResponse<any, null>>(handleError);
+  }
+
   public async getEventsConfig(): Promise<EventsConfig> {
     const resp: AxiosResponse<EventsConfig, null> = await this.client
       .get(this.eventsConfigEndpoint)
