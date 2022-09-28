@@ -1,13 +1,8 @@
 import axios, { AxiosResponse, AxiosInstance, AxiosError } from 'axios';
 
-import { EventsConfig, User } from './keycloak';
-import {
-  Webhook,
-  Filter,
-  UserEventType,
-  AdminEventOperationType,
-  AdminEventResourceType,
-} from './webhook-ext';
+import { Client, EventsConfig, User } from './keycloak';
+import { RelyingPartyClient } from './rp-client';
+import { Webhook } from './webhook-ext';
 
 const handleError = (error: AxiosError): AxiosResponse<any, any> => {
   if (error.response) {
@@ -22,7 +17,7 @@ const handleError = (error: AxiosError): AxiosResponse<any, any> => {
   throw error;
 };
 
-export class Client {
+export class AdminClient {
   baseURL: string;
   realm: string;
   client: AxiosInstance;
@@ -40,7 +35,7 @@ export class Client {
     realm: string,
     clientID: string,
     clientSecret: string,
-  ): Promise<Client> {
+  ): Promise<AdminClient> {
     type AuthenticateResponse = {
       access_token: string;
     };
@@ -52,7 +47,7 @@ export class Client {
         client_secret: clientSecret,
       }).toString(),
     );
-    return new Client(baseURL, realm, resp.data.access_token);
+    return new AdminClient(baseURL, realm, resp.data.access_token);
   }
 
   public get realmEndpoint(): string {
@@ -65,6 +60,10 @@ export class Client {
 
   public get usersEndpoint(): string {
     return `${this.baseURL}/admin/realms/${this.realm}/users`;
+  }
+
+  public get clientsEndpoint(): string {
+    return `${this.baseURL}/admin/realms/${this.realm}/clients`;
   }
 
   public get eventsConfigEndpoint(): string {
@@ -131,6 +130,34 @@ export class Client {
     await this.client
       .put(this.eventsConfigEndpoint, updateCallback(cfg))
       .catch<AxiosResponse<null, EventsConfig>>(handleError);
+  }
+
+  public async createClient(client: Client): Promise<string> {
+    const resp: AxiosResponse<null, Client> = await this.client
+      .post(this.clientsEndpoint, client)
+      .catch<AxiosResponse<null, Client>>(handleError);
+    return resp.headers['location'];
+  }
+
+  public async createRelyingPartyClient(
+    clientID: string,
+  ): Promise<RelyingPartyClient> {
+    await this.createClient({
+      clientId: clientID,
+      enabled: true,
+      standardFlowEnabled: true,
+      directAccessGrantsEnabled: true,
+      frontchannelLogout: true,
+      fullScopeAllowed: true,
+      clientAuthenticatorType: 'client-secret',
+      secret: 'change-me',
+    });
+    return RelyingPartyClient.discover(
+      this.baseURL,
+      this.realm,
+      clientID,
+      'change-me',
+    );
   }
 }
 

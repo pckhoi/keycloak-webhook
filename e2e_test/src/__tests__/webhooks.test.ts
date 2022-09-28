@@ -1,15 +1,17 @@
+import { assert } from 'console';
 import { AddressInfo } from 'net';
 import path from 'path';
 import { promisify } from 'util';
 import { up, down, logs } from '../docker-compose';
 
-import { Client, isRealmReady } from '../keycloak-client';
-import { EventsConfig } from '../keycloak-client/keycloak';
+import { AdminClient, isRealmReady } from '../keycloak/admin-client';
+import { EventsConfig } from '../keycloak/keycloak';
+import { RelyingPartyClient } from '../keycloak/rp-client';
 import {
   AdminEventOperationType,
   AdminEventResourceType,
   UserEventType,
-} from '../keycloak-client/webhook-ext';
+} from '../keycloak/webhook-ext';
 import { retry } from '../retry';
 import { startServer } from '../server';
 
@@ -18,14 +20,19 @@ describe('webhook rest api', () => {
   const realm = 'test-realm';
   const clientID = 'admin-client';
   const clientSecret = 'change-me';
-  let client: Client;
+  let client: AdminClient;
 
   beforeAll(async () => {
     await up();
     await retry({ times: 50, interval: 1000 }, () =>
       isRealmReady(baseURL, realm),
     );
-    client = await Client.authenticate(baseURL, realm, clientID, clientSecret);
+    client = await AdminClient.authenticate(
+      baseURL,
+      realm,
+      clientID,
+      clientSecret,
+    );
   });
 
   afterAll(async () => {
@@ -97,19 +104,37 @@ describe('webhook rest api', () => {
     });
   });
 
-  describe.only('event handler', () => {
+  describe('event handler', () => {
     type adminEventResponse = {
       authDetails: {
+        realmId: string;
+        clientId: string;
         userId: string;
+        ipAddress: string;
       };
+      id: string;
       operationType: string;
+      resourceType: string;
+      representation?: Record<string, any>;
+      resourcePath: string;
+      time: number;
+    };
+
+    type userEventResponse = {
+      details: Record<string, any>;
+      time: number;
+      type: string;
+      userId: string;
+      clientId: string;
     };
 
     const received: Map<number, Record<string, any>> = new Map();
     let serverURL: string;
     let stopServer: () => Promise<void>;
+    let rpClient: RelyingPartyClient;
 
     beforeAll(async () => {
+      rpClient = await client.createRelyingPartyClient('public-client');
       await client.updateEventsConfig(
         (cfg) =>
           ({
@@ -138,7 +163,7 @@ describe('webhook rest api', () => {
       received.clear();
     });
 
-    it('should send user event', async () => {
+    it('should send admin event', async () => {
       await client.createWebhook({
         name: 'User creation',
         url: `${serverURL}/webhook/1`,
@@ -159,7 +184,12 @@ describe('webhook rest api', () => {
           },
         ],
       });
-      await client.createUser({
+      await client.createWebhook({
+        name: 'User login',
+        url: `${serverURL}/webhook/3`,
+        filters: [{ userEventType: UserEventType.Login }],
+      });
+      const userURI = await client.createUser({
         firstName: 'John',
         lastName: 'Doe',
         email: 'john.doe@example.com',
@@ -174,14 +204,31 @@ describe('webhook rest api', () => {
           },
         ],
       });
-      let data: adminEventResponse = received.get(1) as adminEventResponse;
-      expect(data).toBeTruthy();
-      expect(data.operationType).toEqual('CREATE');
+      const userID = path.basename(userURI);
 
-      await client.deleteUser(data.authDetails.userId);
-      data = received.get(2) as adminEventResponse;
-      expect(data).toBeTruthy();
-      expect(data.operationType).toEqual('DELETE');
+      const tokSet = await rpClient.authenticate('johndoe', 'password');
+      expect(tokSet.access_token).toBeTruthy();
+      expect(tokSet.id_token).toBeTruthy();
+
+      await client.deleteUser(userID);
+
+      let adminEventData: adminEventResponse = received.get(
+        1,
+      ) as adminEventResponse;
+      expect(adminEventData).toBeTruthy();
+      expect(adminEventData.operationType).toEqual('CREATE');
+      expect(adminEventData.resourcePath).toEqual(`users/${userID}`);
+      expect(adminEventData.representation?.username).toEqual('johndoe');
+
+      adminEventData = received.get(2) as adminEventResponse;
+      expect(adminEventData).toBeTruthy();
+      expect(adminEventData.operationType).toEqual('DELETE');
+      expect(adminEventData.resourcePath).toEqual(`users/${userID}`);
+
+      const userEventData: userEventResponse = received.get(
+        3,
+      ) as userEventResponse;
+      expect(userEventData.type).toEqual('LOGIN');
     });
   });
 });
