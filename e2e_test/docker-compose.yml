@@ -2,7 +2,9 @@
 version: "3.4"
 services:
   keycloak:
-    build: ..
+    build:
+      context: ..
+      target: e2e_test
     command: start-dev --import-realm
     volumes:
       - ./fixtures:/opt/keycloak/data/import:ro
