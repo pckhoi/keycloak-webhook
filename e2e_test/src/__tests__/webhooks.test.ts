@@ -196,6 +196,20 @@ describe('webhook rest api', () => {
         url: `${serverURL}/webhook/4`,
         filters: [{ adminEventResourceType: AdminEventResourceType.User }],
       });
+      await client.createWebhook({
+        name: 'User creation and removal',
+        url: `${serverURL}/webhook/5`,
+        filters: [
+          {
+            adminEventResourceType: AdminEventResourceType.User,
+            adminEventOperationType: AdminEventOperationType.Create,
+          },
+          {
+            adminEventResourceType: AdminEventResourceType.User,
+            adminEventOperationType: AdminEventOperationType.Delete,
+          },
+        ],
+      });
       const userURI = await client.createUser({
         firstName: 'John',
         lastName: 'Doe',
@@ -239,6 +253,11 @@ describe('webhook rest api', () => {
       expect(userEvents[0].type).toEqual('LOGIN');
 
       adminEvents = received.get(4) as adminEventResponse[];
+      expect(adminEvents).toHaveLength(2);
+      expect(adminEvents[0].operationType).toEqual('CREATE');
+      expect(adminEvents[1].operationType).toEqual('DELETE');
+
+      adminEvents = received.get(5) as adminEventResponse[];
       expect(adminEvents).toHaveLength(2);
       expect(adminEvents[0].operationType).toEqual('CREATE');
       expect(adminEvents[1].operationType).toEqual('DELETE');
