@@ -128,7 +128,7 @@ describe('webhook rest api', () => {
       clientId: string;
     };
 
-    const received: Map<number, Record<string, any>> = new Map();
+    const received: Map<number, Record<string, any>[]> = new Map();
     let serverURL: string;
     let stopServer: () => Promise<void>;
     let rpClient: RelyingPartyClient;
@@ -146,9 +146,11 @@ describe('webhook rest api', () => {
             adminEventsDetailsEnabled: true,
           } as EventsConfig),
       );
-      const server = await startServer((num, data) => {
-        received.set(num, data);
-      });
+      const server = await startServer(
+        (num: number, data: Record<string, any>) => {
+          received.set(num, [...(received.get(num) || []), data]);
+        },
+      );
       serverURL = `http://host.docker.internal:${
         (server.address() as AddressInfo).port
       }`;
@@ -189,6 +191,11 @@ describe('webhook rest api', () => {
         url: `${serverURL}/webhook/3`,
         filters: [{ userEventType: UserEventType.Login }],
       });
+      await client.createWebhook({
+        name: 'User admin events',
+        url: `${serverURL}/webhook/4`,
+        filters: [{ adminEventResourceType: AdminEventResourceType.User }],
+      });
       const userURI = await client.createUser({
         firstName: 'John',
         lastName: 'Doe',
@@ -212,23 +219,29 @@ describe('webhook rest api', () => {
 
       await client.deleteUser(userID);
 
-      let adminEventData: adminEventResponse = received.get(
+      let adminEvents: adminEventResponse[] = received.get(
         1,
-      ) as adminEventResponse;
-      expect(adminEventData).toBeTruthy();
-      expect(adminEventData.operationType).toEqual('CREATE');
-      expect(adminEventData.resourcePath).toEqual(`users/${userID}`);
-      expect(adminEventData.representation?.username).toEqual('johndoe');
+      ) as adminEventResponse[];
+      expect(adminEvents).toHaveLength(1);
+      expect(adminEvents[0].operationType).toEqual('CREATE');
+      expect(adminEvents[0].resourcePath).toEqual(`users/${userID}`);
+      expect(adminEvents[0].representation?.username).toEqual('johndoe');
 
-      adminEventData = received.get(2) as adminEventResponse;
-      expect(adminEventData).toBeTruthy();
-      expect(adminEventData.operationType).toEqual('DELETE');
-      expect(adminEventData.resourcePath).toEqual(`users/${userID}`);
+      adminEvents = received.get(2) as adminEventResponse[];
+      expect(adminEvents).toHaveLength(1);
+      expect(adminEvents[0].operationType).toEqual('DELETE');
+      expect(adminEvents[0].resourcePath).toEqual(`users/${userID}`);
 
-      const userEventData: userEventResponse = received.get(
+      const userEvents: userEventResponse[] = received.get(
         3,
-      ) as userEventResponse;
-      expect(userEventData.type).toEqual('LOGIN');
+      ) as userEventResponse[];
+      expect(userEvents).toHaveLength(1);
+      expect(userEvents[0].type).toEqual('LOGIN');
+
+      adminEvents = received.get(4) as adminEventResponse[];
+      expect(adminEvents).toHaveLength(2);
+      expect(adminEvents[0].operationType).toEqual('CREATE');
+      expect(adminEvents[1].operationType).toEqual('DELETE');
     });
   });
 });
