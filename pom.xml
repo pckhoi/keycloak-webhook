@@ -6,11 +6,32 @@
   <groupId>io.github.pckhoi.keycloak.providers</groupId>
   <artifactId>webhook</artifactId>
   <packaging>jar</packaging>
-  <version>19.0.1.1-SNAPSHOT</version>
+  <version>19.0.1.1</version>
 
-  <name>Webhook SPIs</name>
-  <!-- FIXME change it to the project's website -->
-  <url>https://github.com/wrgl/keycloak-webhook</url>
+  <name>${project.groupId}:${project.artifactId}</name>
+  <description>
+    Provides webhook functionality to Keycloak. A Rest API is provided to create and manage webhooks.
+    This webhook is meant for notification to internal services so no authentication mechanism is
+    provided at the moment. In exchange, each webhook can listen to any kind of event that an event
+    handler can listen to.
+  </description>
+  <url>https://github.com/pckhoi/keycloak-webhook</url>
+
+  <licenses>
+    <license>
+      <name>The Apache License, Version 2.0</name>
+      <url>http://www.apache.org/licenses/LICENSE-2.0.txt</url>
+    </license>
+  </licenses>
+
+  <developers>
+    <developer>
+      <name>Khoi Pham</name>
+      <email>pckhoi@gmail.com</email>
+      <organization>io.github.pckhoi</organization>
+      <organizationUrl>http://github.com/pckhoi</organizationUrl>
+    </developer>
+  </developers>
 
   <properties>
     <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
@@ -57,6 +78,17 @@
     </dependency>
   </dependencies>
 
+  <distributionManagement>
+    <snapshotRepository>
+      <id>ossrh</id>
+      <url>https://s01.oss.sonatype.org/content/repositories/snapshots</url>
+    </snapshotRepository>
+    <repository>
+      <id>ossrh</id>
+      <url>https://s01.oss.sonatype.org/service/local/staging/deploy/maven2/</url>
+    </repository>
+  </distributionManagement>
+
   <build>
     <pluginManagement>
       <!-- lock down plugins versions to avoid using Maven defaults (may be moved to parent pom) -->
@@ -86,6 +118,9 @@
         <plugin>
           <artifactId>maven-install-plugin</artifactId>
           <version>2.5.2</version>
+          <configuration>
+            <createChecksum>true</createChecksum>
+          </configuration>
         </plugin>
         <plugin>
           <artifactId>maven-deploy-plugin</artifactId>
@@ -104,26 +139,61 @@
     </pluginManagement>
     <plugins>
       <plugin>
-        <groupId>org.apache.maven.plugins</groupId>
-        <artifactId>maven-release-plugin</artifactId>
-        <version>${maven-release-plugin.version}</version>
+        <groupId>org.sonatype.plugins</groupId>
+        <artifactId>nexus-staging-maven-plugin</artifactId>
+        <version>1.6.7</version>
+        <extensions>true</extensions>
         <configuration>
-          <scmCommentPrefix>[ci skip]</scmCommentPrefix>
-          <tagNameFormat>@{project.version}</tagNameFormat>
+          <serverId>ossrh</serverId>
+          <nexusUrl>https://s01.oss.sonatype.org/</nexusUrl>
+          <autoReleaseAfterClose>true</autoReleaseAfterClose>
         </configuration>
       </plugin>
       <plugin>
         <groupId>org.apache.maven.plugins</groupId>
+        <artifactId>maven-source-plugin</artifactId>
+        <version>2.2.1</version>
+        <executions>
+          <execution>
+            <id>attach-sources</id>
+            <goals>
+              <goal>jar-no-fork</goal>
+            </goals>
+          </execution>
+        </executions>
+      </plugin>
+      <plugin>
+        <groupId>org.apache.maven.plugins</groupId>
         <artifactId>maven-javadoc-plugin</artifactId>
-        <version>3.4.1</version>
-        <configuration></configuration>
+        <version>2.9.1</version>
+        <executions>
+          <execution>
+            <id>attach-javadocs</id>
+            <goals>
+              <goal>jar</goal>
+            </goals>
+          </execution>
+        </executions>
+      </plugin>
+      <plugin>
+        <groupId>org.apache.maven.plugins</groupId>
+        <artifactId>maven-gpg-plugin</artifactId>
+        <version>1.5</version>
+        <executions>
+          <execution>
+            <id>sign-artifacts</id>
+            <phase>verify</phase>
+            <goals>
+              <goal>sign</goal>
+            </goals>
+          </execution>
+        </executions>
       </plugin>
     </plugins>
   </build>
   <scm>
-    <connection>scm:git:${project.scm.url}</connection>
-    <developerConnection>scm:git:${project.scm.url}</developerConnection>
-    <url>git@github.com:pckhoi/keycloak-webhook.git</url>
-    <tag>HEAD</tag>
+    <connection>scm:git:git://github.com/pckhoi/keycloak-webhook.git</connection>
+    <developerConnection>scm:git:ssh://github.com:pckhoi/keycloak-webhook.git</developerConnection>
+    <url>http://github.com/pckhoi/keycloak-webhook</url>
   </scm>
 </project>
