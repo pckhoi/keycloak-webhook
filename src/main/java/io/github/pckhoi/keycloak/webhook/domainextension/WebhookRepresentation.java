@@ -1,12 +1,12 @@
 // SPDX-License-Identifier: Apache-2.0
 
-package io.github.pckhoi.keycloak.providers.webhook.domainextension;
+package io.github.pckhoi.keycloak.webhook.domainextension;
 
 import java.util.ArrayList;
 import java.util.List;
 
-import io.github.pckhoi.keycloak.providers.webhook.domainextension.jpa.EventFilter;
-import io.github.pckhoi.keycloak.providers.webhook.domainextension.jpa.Webhook;
+import io.github.pckhoi.keycloak.webhook.domainextension.jpa.EventFilter;
+import io.github.pckhoi.keycloak.webhook.domainextension.jpa.Webhook;
 
 public class WebhookRepresentation {
 

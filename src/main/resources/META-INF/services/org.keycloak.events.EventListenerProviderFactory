@@ -1,1 +1,1 @@
-io.github.pckhoi.keycloak.providers.webhook.events.WebhookEventListenerProviderFactory
+io.github.pckhoi.keycloak.webhook.events.WebhookEventListenerProviderFactory

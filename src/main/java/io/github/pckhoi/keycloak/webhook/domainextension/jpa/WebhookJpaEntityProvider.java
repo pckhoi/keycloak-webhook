@@ -1,6 +1,6 @@
 // SPDX-License-Identifier: Apache-2.0
 
-package io.github.pckhoi.keycloak.providers.webhook.domainextension.jpa;
+package io.github.pckhoi.keycloak.webhook.domainextension.jpa;
 
 import org.keycloak.connections.jpa.entityprovider.JpaEntityProvider;
 

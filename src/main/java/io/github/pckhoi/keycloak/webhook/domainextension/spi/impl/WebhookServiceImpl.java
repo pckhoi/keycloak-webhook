@@ -1,16 +1,16 @@
 // SPDX-License-Identifier: Apache-2.0
 
-package io.github.pckhoi.keycloak.providers.webhook.domainextension.spi.impl;
+package io.github.pckhoi.keycloak.webhook.domainextension.spi.impl;
 
 import org.keycloak.connections.jpa.JpaConnectionProvider;
 import org.keycloak.models.KeycloakSession;
 import org.keycloak.models.RealmModel;
 import org.keycloak.models.utils.KeycloakModelUtils;
-import io.github.pckhoi.keycloak.providers.webhook.domainextension.EventFilterRepresentation;
-import io.github.pckhoi.keycloak.providers.webhook.domainextension.WebhookRepresentation;
-import io.github.pckhoi.keycloak.providers.webhook.domainextension.jpa.EventFilter;
-import io.github.pckhoi.keycloak.providers.webhook.domainextension.jpa.Webhook;
-import io.github.pckhoi.keycloak.providers.webhook.domainextension.spi.WebhookService;
+import io.github.pckhoi.keycloak.webhook.domainextension.EventFilterRepresentation;
+import io.github.pckhoi.keycloak.webhook.domainextension.WebhookRepresentation;
+import io.github.pckhoi.keycloak.webhook.domainextension.jpa.EventFilter;
+import io.github.pckhoi.keycloak.webhook.domainextension.jpa.Webhook;
+import io.github.pckhoi.keycloak.webhook.domainextension.spi.WebhookService;
 
 import javax.persistence.EntityManager;
 import java.util.LinkedList;

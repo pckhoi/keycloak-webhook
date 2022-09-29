@@ -1,6 +1,6 @@
 // SPDX-License-Identifier: Apache-2.0
 
-package io.github.pckhoi.keycloak.providers.webhook.events;
+package io.github.pckhoi.keycloak.webhook.events;
 
 import java.io.DataOutputStream;
 import java.io.IOException;
@@ -20,7 +20,7 @@ import org.keycloak.events.EventListenerProvider;
 import org.keycloak.events.admin.AdminEvent;
 import org.keycloak.models.KeycloakSession;
 import org.keycloak.models.RealmModel;
-import io.github.pckhoi.keycloak.providers.webhook.domainextension.jpa.Webhook;
+import io.github.pckhoi.keycloak.webhook.domainextension.jpa.Webhook;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;

@@ -1,6 +1,6 @@
 // SPDX-License-Identifier: Apache-2.0
 
-package io.github.pckhoi.keycloak.providers.webhook.domainextension.rest;
+package io.github.pckhoi.keycloak.webhook.domainextension.rest;
 
 import org.keycloak.Config.Scope;
 import org.keycloak.models.KeycloakSession;

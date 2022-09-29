@@ -1,4 +1,4 @@
-package io.github.pckhoi.keycloak.providers.webhook.domainextension.jpa;
+package io.github.pckhoi.keycloak.webhook.domainextension.jpa;
 
 import javax.validation.ConstraintValidator;
 import javax.validation.ConstraintValidatorContext;

@@ -1,11 +1,11 @@
 // SPDX-License-Identifier: Apache-2.0
 
-package io.github.pckhoi.keycloak.providers.webhook.domainextension.rest;
+package io.github.pckhoi.keycloak.webhook.domainextension.rest;
 
 import org.jboss.resteasy.annotations.cache.NoCache;
 import org.keycloak.models.KeycloakSession;
-import io.github.pckhoi.keycloak.providers.webhook.domainextension.WebhookRepresentation;
-import io.github.pckhoi.keycloak.providers.webhook.domainextension.spi.WebhookService;
+import io.github.pckhoi.keycloak.webhook.domainextension.WebhookRepresentation;
+import io.github.pckhoi.keycloak.webhook.domainextension.spi.WebhookService;
 
 import javax.ws.rs.Consumes;
 import javax.ws.rs.DELETE;

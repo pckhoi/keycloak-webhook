@@ -1,6 +1,6 @@
 // SPDX-License-Identifier: Apache-2.0
 
-package io.github.pckhoi.keycloak.providers.webhook.domainextension.spi;
+package io.github.pckhoi.keycloak.webhook.domainextension.spi;
 
 import org.keycloak.provider.Provider;
 import org.keycloak.provider.ProviderFactory;

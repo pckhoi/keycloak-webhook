@@ -1,6 +1,6 @@
 // SPDX-License-Identifier: Apache-2.0
 
-package io.github.pckhoi.keycloak.providers.webhook.events;
+package io.github.pckhoi.keycloak.webhook.events;
 
 import java.util.Map;
 

@@ -1,12 +1,12 @@
 // SPDX-License-Identifier: Apache-2.0
 
-package io.github.pckhoi.keycloak.providers.webhook.domainextension.spi.impl;
+package io.github.pckhoi.keycloak.webhook.domainextension.spi.impl;
 
 import org.keycloak.Config.Scope;
 import org.keycloak.models.KeycloakSession;
 import org.keycloak.models.KeycloakSessionFactory;
-import io.github.pckhoi.keycloak.providers.webhook.domainextension.spi.WebhookService;
-import io.github.pckhoi.keycloak.providers.webhook.domainextension.spi.WebhookServiceProviderFactory;
+import io.github.pckhoi.keycloak.webhook.domainextension.spi.WebhookService;
+import io.github.pckhoi.keycloak.webhook.domainextension.spi.WebhookServiceProviderFactory;
 
 public class WebhookServiceProviderFactoryImpl implements WebhookServiceProviderFactory {
 
