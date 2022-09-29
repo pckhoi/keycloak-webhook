@@ -1,1 +1,1 @@
-org.pckhoi.keycloak.providers.webhook.domainextension.spi.WebhookSpi
+io.github.pckhoi.keycloak.providers.webhook.domainextension.spi.WebhookSpi

@@ -1,1 +1,1 @@
-org.pckhoi.keycloak.providers.webhook.domainextension.rest.WebhookRealmResourceProviderFactory
+io.github.pckhoi.keycloak.providers.webhook.domainextension.rest.WebhookRealmResourceProviderFactory

@@ -3,8 +3,8 @@ name: "tagged-release"
 
 on:
   push:
-    tags:
-      - "[0-9]+.[0-9]+.[0-9]+.[0-9]+"
+    branches:
+      - main
 
 jobs:
   build:
@@ -21,8 +21,6 @@ jobs:
           cache: maven
       - name: Build with Maven
         run: mvn --batch-mode --update-snapshots package
-      - id: get_version
-        uses: battila7/get-version-action@v2
       - name: Release
         uses: qcastel/github-actions-maven-release@v1.12.34
         env:
@@ -30,8 +28,8 @@ jobs:
         with:
           git-release-bot-name: "maven-bot"
           git-release-bot-email: "maven-bot@pckhoi.org"
-          release-branch-name: "${{ steps.get_version.outputs.version }}"
+          release-branch-name: main
           maven-args:
             "-Dmaven.javadoc.skip=true -DskipTests -DskipITs -Ddockerfile.skip
-            -DdockerCompose.skip -Dmaven.deploy.skip=true"
+            -DdockerCompose.skip -Dmaven.deploy.skip=true -DbranchName=kc-19.0.1"
           ssh-private-key: ${{ secrets.SSH_PRIVATE_KEY }}
