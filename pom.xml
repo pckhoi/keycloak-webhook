@@ -6,7 +6,7 @@
   <groupId>io.github.pckhoi.keycloak</groupId>
   <artifactId>webhook</artifactId>
   <packaging>jar</packaging>
-  <version>19.0.1.1-SNAPSHOT</version>
+  <version>19.0.1.1</version>
 
   <name>${project.groupId}:${project.artifactId}</name>
   <description>
@@ -142,6 +142,7 @@
     <connection>scm:git:git://github.com/pckhoi/keycloak-webhook.git</connection>
     <developerConnection>scm:git:ssh://github.com:pckhoi/keycloak-webhook.git</developerConnection>
     <url>http://github.com/pckhoi/keycloak-webhook</url>
+    <tag>webhook-19.0.1.1</tag>
   </scm>
   <profiles>
     <profile>
