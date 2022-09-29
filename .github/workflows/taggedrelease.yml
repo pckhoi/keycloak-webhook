@@ -25,6 +25,8 @@ jobs:
         uses: battila7/get-version-action@v2
       - name: Release
         uses: qcastel/github-actions-maven-release@v1.12.34
+        env:
+          JAVA_HOME: /usr/lib/jvm/java-1.8-openjdk/
         with:
           git-release-bot-name: "maven-bot"
           git-release-bot-email: "maven-bot@pckhoi.org"
