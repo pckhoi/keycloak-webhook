@@ -6,7 +6,7 @@
   <groupId>io.github.pckhoi.keycloak</groupId>
   <artifactId>webhook</artifactId>
   <packaging>jar</packaging>
-  <version>19.0.1.1-SNAPSHOT</version>
+  <version>19.0.1.1</version>
 
   <name>${project.groupId}:${project.artifactId}</name>
   <description>
