@@ -1,0 +1,21 @@
+<?xml version='1.0' encoding='UTF-8'?>
+
+<module xmlns="urn:jboss:module:1.1" name="io.github.pckhoi.keycloak.webhook">
+
+    <resources>
+        <resource-root path="webhook-15.1.1.1.jar" />
+    </resources>
+
+    <dependencies>
+        <module name="org.hibernate" />
+        <module name="org.keycloak.keycloak-core" />
+        <module
+            name="org.keycloak.keycloak-model-jpa" />
+        <module
+            name="org.keycloak.keycloak-server-spi" />
+        <module
+            name="org.keycloak.keycloak-server-spi-private" />
+        <module
+            name="org.keycloak.keycloak-services" />
+    </dependencies>
+</module>

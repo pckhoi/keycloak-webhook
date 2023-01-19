@@ -1,6 +1,6 @@
 # syntax=docker/dockerfile:1
 
-ARG KEYCLOAK_VERSION=19.0.2
+ARG KEYCLOAK_VERSION=15.1.1
 ARG PROVIDERS_VERSION=1
 
 FROM maven:3.6.0-jdk-11-slim AS providers
@@ -23,10 +23,28 @@ FROM quay.io/keycloak/keycloak:${KEYCLOAK_VERSION} AS e2e_test
 
 ARG KEYCLOAK_VERSION
 ARG PROVIDERS_VERSION
-ARG KC_HOME_DIR=/opt/keycloak
+ARG KC_HOME_DIR=/opt/jboss/keycloak
+
+
+
+
+
+# COPY --from=providers \
+#     /home/app/target/webhook-$KEYCLOAK_VERSION.$PROVIDERS_VERSION.jar \
+#     ${KC_HOME_DIR}/standalone/deployments
+
+
+
+COPY module.xml ${KC_HOME_DIR}/modules/io/github/pckhoi/keycloak/webhook/main/
 
 COPY --from=providers \
     /home/app/target/webhook-$KEYCLOAK_VERSION.$PROVIDERS_VERSION.jar \
-    ${KC_HOME_DIR}/providers
+    ${KC_HOME_DIR}/modules/io/github/pckhoi/keycloak/webhook/main/
 
-RUN ${KC_HOME_DIR}/bin/kc.sh build
+
+
+# COPY --from=providers \
+#     /home/app/target/webhook-$KEYCLOAK_VERSION.$PROVIDERS_VERSION.jar \
+#     /tmp/
+
+# RUN ${KC_HOME_DIR}/bin/jboss-cli.sh --command="module add --name=io.github.pckhoi.keycloak.webhook --resources=/tmp/webhook-$KEYCLOAK_VERSION.$PROVIDERS_VERSION.jar --dependencies=org.hibernate,org.keycloak.keycloak-core,org.keycloak.keycloak-model-jpa,org.keycloak.keycloak-server-spi,org.keycloak.keycloak-server-spi-private,org.keycloak.keycloak-services"

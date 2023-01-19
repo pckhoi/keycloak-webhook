@@ -26,7 +26,7 @@ export class RelyingPartyClient {
     clientID: string,
     clientSecret: string,
   ): Promise<RelyingPartyClient> {
-    const issuer = `${baseURL}/realms/${realm}`;
+    const issuer = `${baseURL}/auth/realms/${realm}`;
     const resp: AxiosResponse<OpenIDConfig, null> = await axios.get(
       `${issuer}/.well-known/openid-configuration`,
     );

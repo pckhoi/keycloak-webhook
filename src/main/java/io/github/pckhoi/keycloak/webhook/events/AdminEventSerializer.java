@@ -32,7 +32,7 @@ public class AdminEventSerializer extends StdSerializer<AdminEventRepresentation
             jgen.writeStringField("id", value.getId());
         }
         if (value.getAuthDetails() != null) {
-            jgen.writePOJOField("authDetails", value.getAuthDetails());
+            jgen.writeObjectField("authDetails", value.getAuthDetails());
         }
         if (value.getOperationType() != null) {
             jgen.writeStringField("operationType", value.getOperationType().toString());

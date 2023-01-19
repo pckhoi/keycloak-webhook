@@ -1,9 +1,9 @@
-openapi: '3.0.2'
+openapi: "3.0.2"
 info:
   title: Keycloak Realm Webhook API
-  version: '19.0.2.1'
+  version: "15.1.1"
 paths:
-  /realms/{realmId}/pckhoi-webhook/webhooks:
+  /auth/realms/{realmId}/pckhoi-webhook/webhooks:
     parameters:
       - name: realmId
         in: path
@@ -16,27 +16,27 @@ paths:
         content:
           application/json:
             schema:
-              $ref: '#/components/schemas/webhook'
+              $ref: "#/components/schemas/webhook"
       responses:
-        '201':
+        "201":
           description: Created
     get:
       operationId: listWebhooks
       responses:
-        '200':
+        "200":
           description: OK
           content:
             application/json:
               schema:
                 type: array
                 items:
-                  $ref: '#/components/schemas/webhook'
+                  $ref: "#/components/schemas/webhook"
     delete:
       operationId: deleteAllWebhooks
       responses:
-        '200':
+        "200":
           description: OK
-  /realms/{realmId}/pckhoi-webhook/webhooks/{webhookId}:
+  /auth/realms/{realmId}/pckhoi-webhook/webhooks/{webhookId}:
     parameters:
       - name: realmId
         in: path
@@ -51,16 +51,16 @@ paths:
     get:
       operationId: getWebhook
       responses:
-        '200':
+        "200":
           description: OK
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/webhook'
+                $ref: "#/components/schemas/webhook"
     delete:
       operationId: deleteWebhook
       responses:
-        '200':
+        "200":
           description: OK
 components:
   schemas:
@@ -78,7 +78,7 @@ components:
         filters:
           type: array
           items:
-            $ref: '#/components/schemas/eventFilter'
+            $ref: "#/components/schemas/eventFilter"
     eventFilter:
       type: object
       properties:

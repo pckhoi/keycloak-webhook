@@ -4,14 +4,14 @@ package io.github.pckhoi.keycloak.webhook.domainextension.jpa;
 
 import org.keycloak.connections.jpa.entityprovider.JpaEntityProvider;
 
-import java.util.Collections;
+import java.util.Arrays;
 import java.util.List;
 
 public class WebhookJpaEntityProvider implements JpaEntityProvider {
 
     @Override
     public List<Class<?>> getEntities() {
-        return Collections.<Class<?>>singletonList(Webhook.class);
+        return Arrays.asList(Webhook.class, EventFilter.class);
     }
 
     @Override

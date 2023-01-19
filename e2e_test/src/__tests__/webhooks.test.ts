@@ -43,7 +43,7 @@ describe('webhook rest api', () => {
   describe('rest api', () => {
     let webhookID: string;
     describe('post /webhooks', () => {
-      it('should create webhook', async () => {
+      it.only('should create webhook', async () => {
         const webhookURI = await client.createWebhook({
           name: 'My webhook',
           url: 'http://localhost:1234/webhook',

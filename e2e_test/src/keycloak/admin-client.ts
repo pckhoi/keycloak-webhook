@@ -40,7 +40,7 @@ export class AdminClient {
       access_token: string;
     };
     const resp: AxiosResponse<AuthenticateResponse, string> = await axios.post(
-      `${baseURL}/realms/${realm}/protocol/openid-connect/token`,
+      `${baseURL}/auth/realms/${realm}/protocol/openid-connect/token`,
       new URLSearchParams({
         grant_type: 'client_credentials',
         client_id: clientID,
@@ -51,11 +51,11 @@ export class AdminClient {
   }
 
   public get realmEndpoint(): string {
-    return `${this.baseURL}/realms/${this.realm}`;
+    return `${this.baseURL}/auth/realms/${this.realm}`;
   }
 
   public get webhooksEndpoint(): string {
-    return `${this.baseURL}/realms/${this.realm}/pckhoi-webhook/webhooks`;
+    return `${this.baseURL}/auth/realms/${this.realm}/pckhoi-webhook/webhooks`;
   }
 
   public get usersEndpoint(): string {
@@ -166,5 +166,5 @@ export const isRealmReady = (
   realm: string,
 ): Promise<AxiosResponse<any, null>> =>
   axios
-    .get(`${baseURL}/realms/${realm}`)
+    .get(`${baseURL}/auth/realms/${realm}`)
     .catch<AxiosResponse<any, null>>(handleError);
