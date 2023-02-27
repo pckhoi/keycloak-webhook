@@ -5,9 +5,7 @@ services:
     build:
       context: ..
       target: e2e_test
-    command: start-dev --import-realm
-    volumes:
-      - ./fixtures:/opt/keycloak/data/import:ro
+    command: start-dev
     ports:
       - 8080:8080
     environment:
@@ -21,9 +19,9 @@ services:
           "CMD",
           "curl",
           "-f",
-          "http://localhost:8080/realms/test-realm"
+          "http://localhost:8080/realms/master"
         ]
-      interval: 30s
+      interval: 1s
       timeout: 10s
-      retries: 5
-      start_period: 10s
+      retries: 20
+      start_period: 20s

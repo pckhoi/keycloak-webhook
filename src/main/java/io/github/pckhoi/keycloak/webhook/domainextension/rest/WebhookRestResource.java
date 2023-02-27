@@ -3,11 +3,13 @@
 package io.github.pckhoi.keycloak.webhook.domainextension.rest;
 
 import org.keycloak.models.KeycloakSession;
+import org.keycloak.models.RealmModel;
 import org.keycloak.services.managers.AppAuthManager;
 import org.keycloak.services.managers.AuthenticationManager;
 
 import javax.ws.rs.ForbiddenException;
 import javax.ws.rs.NotAuthorizedException;
+import javax.ws.rs.NotFoundException;
 import javax.ws.rs.Path;
 
 public class WebhookRestResource {
@@ -22,20 +24,20 @@ public class WebhookRestResource {
 
     @Path("webhooks")
     public WebhookResource getWebhookResource() {
-        checkRealmAdmin();
+        checkAccess();
         return new WebhookResource(session);
     }
 
     /**
-     * checkRealmAdmin ensures that only users with "realm-management.realm-admin"
-     * role can access this resource
+     * checkRealmAdmin ensures that only service account of
+     * "keycloak-webhook" client can access this resource
      */
-    private void checkRealmAdmin() {
+    private void checkAccess() {
         if (auth == null) {
             throw new NotAuthorizedException("Bearer");
         } else if (auth.getToken().getRealmAccess() == null
-                || !auth.getToken().getResourceAccess().get("realm-management").isUserInRole("realm-admin")) {
-            throw new ForbiddenException("Does not have realm-management.realm-admin role");
+                || !auth.getToken().getResourceAccess().get("keycloak-webhook").isUserInRole("uma_protection")) {
+            throw new ForbiddenException("Does not have keycloak-webhook.uma_protection role");
         }
     }
 
